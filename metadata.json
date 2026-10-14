@@ -1,0 +1,6 @@
+{
+  "name": "Refatoração de Pedidos - Clean Code & POO",
+  "description": "Módulo de processamento de pedidos refatorado aplicando Clean Code, SOLID, Strategy Pattern e separação de responsabilidades com testes automatizados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
