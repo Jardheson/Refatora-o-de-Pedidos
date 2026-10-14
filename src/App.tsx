@@ -14,7 +14,8 @@ import {
   Terminal, 
   FileCode, 
   Award,
-  ArrowRight
+  ArrowRight,
+  BookOpen
 } from 'lucide-react';
 import { 
   PedidoService, 
@@ -28,7 +29,7 @@ import {
 } from './pedido';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'simulator' | 'comparison' | 'tests' | 'submission'>('simulator');
+  const [activeTab, setActiveTab] = useState<'simulator' | 'comparison' | 'tests' | 'submission' | 'docs'>('simulator');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   // --- State for Simulator ---
@@ -561,6 +562,18 @@ test('Calcula pedido de funcionário com desconto de 30% (140)', () => {
           >
             <FileCode className="w-4 h-4" />
             <span>Arquivos para Moodle</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('docs')}
+            className={`px-4 py-2.5 text-xs sm:text-sm font-medium border-b-2 flex items-center space-x-2 transition-all whitespace-nowrap ${
+              activeTab === 'docs'
+                ? 'border-indigo-500 text-indigo-400 bg-slate-900/40'
+                : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700'
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>Documentação Técnica</span>
           </button>
         </div>
       </header>
@@ -1202,6 +1215,186 @@ export class PedidoService {
               </div>
               <div className="p-4 bg-slate-950/90 text-xs text-slate-300 whitespace-pre-line leading-relaxed font-sans">
                 {textoJustificativaMoodle}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================
+            TAB 5: DOCUMENTAÇÃO TÉCNICA
+           ======================================================== */}
+        {activeTab === 'docs' && (
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-indigo-950/60 to-slate-900 border border-indigo-500/30 p-5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-mono text-indigo-400 uppercase tracking-wider block">Documentação Arquitetural</span>
+                <h2 className="text-base font-semibold text-white mt-0.5">Manual do Módulo de Pedidos Refatorado</h2>
+                <p className="text-xs text-slate-300 mt-1">
+                  Especificação formal de engenharia de software, contratos de interface, diagramas de classe e justificativas teóricas.
+                </p>
+              </div>
+              <button
+                onClick={() => handleCopy(`# Documentação Técnica: Refatoração do Módulo de Pedidos\n\nConsulte o arquivo DOCUMENTACAO.md no repositório para a versão completa.`, 'docmd')}
+                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg flex items-center space-x-1.5 shadow-sm"
+              >
+                {copiedKey === 'docmd' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                <span>{copiedKey === 'docmd' ? 'Copiado!' : 'Copiar DOCUMENTACAO.md'}</span>
+              </button>
+            </div>
+
+            {/* 4 Pilares da Refatoração */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div className="flex items-center space-x-2 text-indigo-400 font-semibold text-xs">
+                  <Sparkles className="w-4 h-4" />
+                  <span>1. Padrão Estratégia (Strategy Pattern)</span>
+                </div>
+                <p className="text-xs text-slate-300">
+                  Descontos modelados como classes independentes implementando a interface <code className="text-indigo-300">EstrategiaDesconto</code>.
+                </p>
+                <div className="bg-slate-950 p-2.5 rounded font-mono text-[11px] text-slate-400 space-y-1">
+                  <div>• <span className="text-emerald-400">DescontoComum:</span> f(x) = x (0% desconto)</div>
+                  <div>• <span className="text-indigo-400">DescontoVip:</span> f(x) = x * 0.9 (10% desconto)</div>
+                  <div>• <span className="text-purple-400">DescontoFuncionario:</span> f(x) = x * 0.7 (30% desconto)</div>
+                  <div>• <span className="text-amber-400">DescontoPromocional:</span> f(x) = x * 0.8 (20% desconto - OCP)</div>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Benefício: Respeita o Princípio Aberto/Fechado (OCP). Qualquer novo desconto é adicionado sem modificar a classe de serviço.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div className="flex items-center space-x-2 text-emerald-400 font-semibold text-xs">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>2. Responsabilidade Única (SRP)</span>
+                </div>
+                <p className="text-xs text-slate-300">
+                  A função monolítica legada acumulava 4 responsabilidades simultâneas, agora decompostas em métodos coesos:
+                </p>
+                <div className="bg-slate-950 p-2.5 rounded font-mono text-[11px] text-slate-400 space-y-1">
+                  <div>• <span className="text-slate-200">calcularSubtotal():</span> Apenas soma aritmética dos itens</div>
+                  <div>• <span className="text-slate-200">calcularTotal():</span> Aplicação pura da estratégia de desconto</div>
+                  <div>• <span className="text-slate-200">verificarENotificarVolume():</span> Regra de negócio de pedido grande (&gt; 500)</div>
+                  <div>• <span className="text-slate-200">notificarConfirmacaoAoCliente():</span> Disparo explícito de comunicação</div>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Benefício: Cada método tem um único motivo para mudar e pode ser testado isoladamente.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div className="flex items-center space-x-2 text-amber-400 font-semibold text-xs">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span>3. Eliminação de Flag Arguments</span>
+                </div>
+                <p className="text-xs text-slate-300">
+                  O argumento booleano <code className="text-rose-400">enviarEmail: boolean</code> foi totalmente eliminado.
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Conforme Robert C. Martin no livro <em>Clean Code</em> (Capítulo 3 - Funções): 
+                  <span className="italic block mt-1 text-slate-300 border-l-2 border-amber-500/40 pl-2">
+                    "Argumentos flag são feios. Passar um booleano para uma função é uma prática terrível. Complica imediatamente a assinatura do método, proclamando em alto e bom som que a função faz mais de uma coisa."
+                  </span>
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Solução: Notificação e cálculo são desacoplados; o chamador decide explicitamente quando notificar.
+                </p>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div className="flex items-center space-x-2 text-blue-400 font-semibold text-xs">
+                  <Layers className="w-4 h-4" />
+                  <span>4. Inversão de Dependências (DIP) & Notificação</span>
+                </div>
+                <p className="text-xs text-slate-300">
+                  O código legado continha <code className="text-rose-400">console.log</code> acoplado diretamente dentro da função de negócio.
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Criada a interface <code className="text-indigo-300">ServicoNotificacao</code> com métodos para alerta de volume e notificação de cliente. 
+                  A classe <code className="text-indigo-300">PedidoService</code> recebe a abstração via injeção de dependência no construtor.
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Benefício: Em produção, utiliza-se serviço de e-mail/SMS; em testes unitários, utiliza-se mocks sem efeitos colaterais.
+                </p>
+              </div>
+            </div>
+
+            {/* Diagrama de Classes e Arquitetura */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                <span className="text-xs font-semibold text-white flex items-center space-x-2">
+                  <Code2 className="w-4 h-4 text-indigo-400" />
+                  <span>Diagrama Arquitetural de Classes (TypeScript)</span>
+                </span>
+                <span className="text-[10px] font-mono text-slate-500">ASCII Architecture</span>
+              </div>
+              <div className="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed">
+                <pre>{`┌──────────────────────────────────────┐
+│       <<interface>>                  │
+│       EstrategiaDesconto             │
+├──────────────────────────────────────┤
+│ + calcular(total: number): number    │
+└──────────────────▲───────────────────┘
+                   │
+  ┌────────────────┼────────────────┬──────────────────┐
+  │                │                │                  │
+┌─┴────────────┐ ┌─┴──────────┐ ┌───┴─────────────┐ ┌──┴───────────────┐
+│DescontoComum │ │DescontoVip │ │DescontoFunciona │ │DescontoPromocao  │
+│(sem desconto)│ │(10% desc.) │ │(30% desconto)   │ │(20% desc. - OCP) │
+└──────────────┘ └────────────┘ └─────────────────┘ └──────────────────┘
+
+┌──────────────────────────────────────┐
+│       <<interface>>                  │
+│       ServicoNotificacao             │
+├──────────────────────────────────────┤
+│ + notificarPedidoGrande(total): void │
+│ + notificarCliente(dest, total): void│
+└──────────────────▲───────────────────┘
+                   │
+         ┌─────────┴──────────┐
+         │ NotificadorConsole │ (ou Mocks para Testes Unitários)
+         └────────────────────┘
+
+                   ▲ (Injetado via Construtor)
+                   │
+┌──────────────────┴───────────────────────────────────────────────────┐
+│                            PedidoService                             │
+├──────────────────────────────────────────────────────────────────────┤
+│ - estrategiaDesconto: EstrategiaDesconto                             │
+│ - servicoNotificacao: ServicoNotificacao                             │
+│ - readonly LIMITE_PEDIDO_GRANDE = 500                                │
+├──────────────────────────────────────────────────────────────────────┤
+│ + calcularSubtotal(pedido: Pedido): number                           │
+│ + calcularTotal(pedido: Pedido): number                              │
+│ + verificarENotificarVolume(total: number): boolean                  │
+│ + notificarConfirmacaoAoCliente(pedido: Pedido, total: number): void │
+│ + processar(pedido: Pedido): ResultadoProcessamento                  │
+└──────────────────────────────────────────────────────────────────────┘`}</pre>
+              </div>
+            </div>
+
+            {/* Guia de Comandos e Arquivos do Projeto */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+              <h3 className="text-sm font-semibold text-white">Guia de Arquivos e Execução</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                  <div className="font-mono text-indigo-400 font-semibold mb-1">pedido.ts</div>
+                  <p className="text-slate-400 text-[11px]">
+                    Arquivo principal refatorado contendo as interfaces, classes de estratégia e o serviço desacoplado.
+                  </p>
+                </div>
+                <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                  <div className="font-mono text-emerald-400 font-semibold mb-1">pedido.test.ts</div>
+                  <p className="text-slate-400 text-[11px]">
+                    Script com os casos de teste pedidos no enunciado (Comum 200, VIP 180, Funcionário 140).
+                  </p>
+                </div>
+                <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                  <div className="font-mono text-amber-400 font-semibold mb-1">DOCUMENTACAO.md</div>
+                  <p className="text-slate-400 text-[11px]">
+                    Arquivo Markdown completo na raiz do repositório pronto para submissão e avaliação técnica.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
