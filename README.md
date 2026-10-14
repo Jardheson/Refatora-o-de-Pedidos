@@ -2,7 +2,7 @@
 
 Projeto de engenharia de software focado na refatoração de código legado de pedidos, aplicando princípios **Clean Code**, **SOLID** e o padrão de projeto **Strategy**.
 
-## 🚀 Como Executar
+## Como Executar
 
 ### 1. Testes Automatizados (Feedback Imediato)
 ```bash
@@ -18,7 +18,7 @@ Acesse `http://localhost:3000` para abrir o simulador em tempo real, comparador 
 
 ---
 
-## 📂 Arquivos Principais
+## Arquivos Principais
 
 - [`pedido.ts`](./pedido.ts) ou [`src/pedido.ts`](./src/pedido.ts): Implementação refatorada com `EstrategiaDesconto`, `ServicoNotificacao` e `PedidoService`.
 - [`pedido.test.ts`](./pedido.test.ts): Casos de teste formais solicitados para entrega no Moodle.
@@ -27,7 +27,7 @@ Acesse `http://localhost:3000` para abrir o simulador em tempo real, comparador 
 
 ---
 
-## 🎯 Padrões e Práticas Aplicadas
+## Padrões e Práticas Aplicadas
 
 1. **Nomes Reveladores:** Variáveis expressivas substituindo `p`, `q`, `t`, `i`.
 2. **Responsabilidade Única (SRP):** Funções especializadas e independentes para cálculo, desconto, volume e notificação.
